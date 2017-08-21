@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler', "~> 1.5"
   s.add_development_dependency 'rake', '~> 10.1'
   s.add_development_dependency 'rspec', '~> 3.6'
-  s.add_development_dependency 'simplecov', '~> 0.8'
 
   s.add_development_dependency 'axlsx'
   s.add_development_dependency 'saxlsx'

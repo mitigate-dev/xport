@@ -1,7 +1,5 @@
 require "spec_helper"
 require "saxlsx"
-require "axlsx"
-require "csv"
 
 describe Xport::Export do
   User = Struct.new(:id, :name, :email)
@@ -26,10 +24,6 @@ describe Xport::Export do
         cell.color = "AAAAAA"
         cell
       end
-    end
-
-    def object_class
-      User
     end
   end
 

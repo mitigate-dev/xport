@@ -2,6 +2,12 @@
 
 module Xport
   module Axlsx
+    extend ActiveSupport::Concern
+
+    included do
+      require 'axlsx'
+    end
+
     def to_xlsx(&block)
       formatter = Xport::Axlsx::Formatter.new(self)
       to_file(formatter, &block)

@@ -2,6 +2,12 @@
 
 module Xport
   module CSV
+    extend ActiveSupport::Concern
+
+    included do
+      require 'csv'
+    end
+
     def to_csv(&block)
       formatter = Xport::CSV::Formatter.new(self)
       to_file(formatter, &block)
