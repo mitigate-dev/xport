@@ -12,8 +12,10 @@ require 'xport/cell'
 require 'xport/downloads_controller_methods'
 require 'xport/export_controller_methods'
 require 'xport/download_presenter'
-require 'xport/axlsx'
-require 'xport/csv'
+
+require 'xport/formatters/csv'
+require 'xport/formatters/axlsx'
+require 'xport/formatters/rubyxl'
 
 module Xport
 end

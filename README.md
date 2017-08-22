@@ -5,13 +5,37 @@
 
 Tabular data export to Excel, CSV, etc.
 
+## Features
+
+- [Header groups](#header-groups) - `column :name, group: :project`
+- Column widths - `column :name, width: 10`
+- Column header titles - `column :name, header: "Full name"`
+- Column types - `column :name, type: :string`
+- Column styles - `column :pct, style: { num_fmt: Axlsx::NUM_FMT_PERCENT, format_code: '0.0%' }`
+- Cell colors - `cell.color = "AAAAAA"`
+- Cell comments - `cell.comment = "..."`
+
+## Formatters
+
+| Feature       | csv | axlsx | rubyXL |
+|:--------------|:----|:------|:-------|
+| Column groups | No  | Yes   | Yes    |
+| Column widths | No  | Yes   | Yes    |
+| Column types  | No  | Yes   | No*    |
+| Column styles | No  | Yes   | No*    |
+| Cell colors   | No  | Yes   | No*    |
+| Cell comments | No  | Yes   | No*    |
+
+\* - PRs are welcome
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
 gem 'xport'
-gem 'axlsx'
+gem 'axlsx' # optional
+gem 'rubyXL' # optional
 ```
 
 And then execute:
@@ -28,7 +52,6 @@ User.create(name: "John")
 User.create(name: "Ben")
 
 class UserExport < Xport::Export
-  include Xport::Axlsx
   include Xport::CSV
 
   columns do
@@ -40,6 +63,7 @@ class UserExport < Xport::Export
       cell = Xport::Cell.new
       cell.value = "#{user.id}@example.com"
       cell.color = "AAAAAA"
+      cell.comment = "Excel comment"
       cell
     end
   end
@@ -55,6 +79,32 @@ id,Full name,email
 1,JOHN,1@example.com
 2,BEN,2@example.com
 ```
+
+See [examples](examples) for more examples.
+
+### Header groups
+
+```ruby
+class UserExport < Xport::Export
+  include Xport::Axlsx
+
+  columns do
+    column(:id,    group: "User")
+    column(:name,  group: "User")
+    column(:email, group: "User")
+    column(:admin, group: "Roles") { |u| "No" }
+    column(:owner, group: "Roles") { |u| "Yes" }
+  end
+end
+
+File.open("export.xlsx", "wb") do |f|
+  f.write UserExport.new(users).to_xlsx.read
+end
+```
+
+Output:
+
+![How To](doc/grouping.png)
 
 ## Contributing
 
