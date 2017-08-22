@@ -104,7 +104,7 @@ end
 
 Output:
 
-![How To](doc/grouping.png)
+![Excel screenshot](images/grouping.png)
 
 ## Contributing
 
