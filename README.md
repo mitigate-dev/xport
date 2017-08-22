@@ -44,7 +44,7 @@ And then execute:
 $ bundle
 ```
 
-### Usage
+## Usage
 
 ```ruby
 class User < ActiveRecord::Base; end
