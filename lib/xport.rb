@@ -16,6 +16,7 @@ require 'xport/download_presenter'
 require 'xport/formatters/csv'
 require 'xport/formatters/axlsx'
 require 'xport/formatters/rubyxl'
+require 'xport/formatters/xlsxtream'
 
 module Xport
 end

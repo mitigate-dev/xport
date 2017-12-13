@@ -13,6 +13,7 @@ class UserExport < Xport::Export
   include Xport::CSV
   include Xport::Axlsx
   include Xport::RubyXL
+  include Xport::Xlsxtream
 
   columns do
     column :id, width: 10

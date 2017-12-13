@@ -14,7 +14,7 @@ module Xport
     end
 
     class Formatter
-      attr_reader :export, :workbook, :worksheet
+      attr_reader :export, :workbook
 
       delegate :builder, to: :export
 
@@ -22,7 +22,6 @@ module Xport
         @export    = export
         @package   = ::Axlsx::Package.new
         @workbook  = @package.workbook
-        @worksheet = @workbook.add_worksheet
 
         # Support Numbers and multiline strings in Excel Mac 2011
         # https://github.com/randym/axlsx/issues/252
@@ -33,11 +32,16 @@ module Xport
         @package.to_stream
       end
 
-      def add_header_row(row)
+      def add_worksheet
+        worksheet = @workbook.add_worksheet
+        yield worksheet
+      end
+
+      def add_header_row(worksheet, row)
         worksheet.add_row row, style: header_style
       end
 
-      def add_row(row)
+      def add_row(worksheet, row)
         values = row.map { |v| v.is_a?(Xport::Cell) ? v.value : v }
         axlsx_row = worksheet.add_row(values, style: styles, types: builder.types)
         row.each.with_index do |cell, i|
@@ -55,11 +59,11 @@ module Xport
         end
       end
 
-      def merge_header_cells(range)
+      def merge_header_cells(worksheet, range)
         worksheet.merge_cells worksheet.rows.first.cells[range]
       end
 
-      def column_widths(*widths)
+      def column_widths(worksheet, *widths)
         worksheet.column_widths(*widths)
       end
 

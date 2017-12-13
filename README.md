@@ -17,14 +17,14 @@ Tabular data export to Excel, CSV, etc.
 
 ## Formatters
 
-| Feature       | csv | axlsx | rubyXL |
-|:--------------|:----|:------|:-------|
-| Column groups | No  | Yes   | Yes    |
-| Column widths | No  | Yes   | Yes    |
-| Column types  | No  | Yes   | No*    |
-| Column styles | No  | Yes   | No*    |
-| Cell colors   | No  | Yes   | No*    |
-| Cell comments | No  | Yes   | No*    |
+| Feature       | csv | axlsx | rubyXL | xlsxtream |
+|:--------------|:----|:------|:-------|:----------|
+| Column groups | No  | Yes   | Yes    | No        |
+| Column widths | No  | Yes   | Yes    | No        |
+| Column types  | No  | Yes   | No*    | No        |
+| Column styles | No  | Yes   | No*    | No        |
+| Cell colors   | No  | Yes   | No*    | No        |
+| Cell comments | No  | Yes   | No*    | No        |
 
 \* - PRs are welcome
 
