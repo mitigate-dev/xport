@@ -36,6 +36,7 @@ Add this line to your application's Gemfile:
 gem 'xport'
 gem 'axlsx' # optional
 gem 'rubyXL' # optional
+fem 'xlsxtream' # optional
 ```
 
 And then execute:
@@ -53,6 +54,7 @@ User.create(name: "Ben")
 
 class UserExport < Xport::Export
   include Xport::CSV
+  include Xport::Axlsx
 
   columns do
     column :id
@@ -70,6 +72,7 @@ class UserExport < Xport::Export
 end
 
 UserExport.new(User.all).to_csv
+UserExport.new(User.all).to_xlsx
 ```
 
 Output:
