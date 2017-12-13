@@ -14,14 +14,13 @@ module Xport
     end
 
     class Formatter
-      attr_reader :export, :workbook, :worksheet
+      attr_reader :export, :workbook
 
       delegate :builder, to: :export
 
       def initialize(export)
         @export    = export
         @workbook  = ::RubyXL::Workbook.new
-        @worksheet = @workbook.worksheets[0]
         @i = 0
       end
 
@@ -29,7 +28,12 @@ module Xport
         workbook.stream
       end
 
-      def add_row(row)
+      def add_worksheet
+        worksheet = workbook.worksheets[0]
+        yield worksheet
+      end
+
+      def add_row(worksheet, row)
         row.each.with_index do |v, j|
           value = v.is_a?(Xport::Cell) ? v.value : v
           worksheet.add_cell(@i, j, value)
@@ -38,11 +42,11 @@ module Xport
       end
       alias_method :add_header_row, :add_row
 
-      def merge_header_cells(range)
+      def merge_header_cells(worksheet, range)
         worksheet.merge_cells(0, range.first, 0, range.last)
       end
 
-      def column_widths(*widths)
+      def column_widths(worksheet, *widths)
         widths.each.with_index do |width, i|
           next unless width
           worksheet.change_column_width(i, width)

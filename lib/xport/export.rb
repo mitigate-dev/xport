@@ -65,12 +65,14 @@ module Xport
     def preload!; end
 
     def write_contents(formatter, &block)
-      write_header(formatter)
-      write_body(formatter, &block)
-      write_widths(formatter)
+      formatter.add_worksheet do |worksheet|
+        write_header(formatter, worksheet)
+        write_body(formatter, worksheet, &block)
+        write_widths(formatter, worksheet)
+      end
     end
 
-    def write_header(formatter)
+    def write_header(formatter, worksheet)
       if builder.grouped?
         group_row = []
         builder.groups_with_offset_and_colspan.each do |group, offset, colspan|
@@ -79,25 +81,25 @@ module Xport
             group_row << nil
           end
         end
-        formatter.add_header_row group_row
+        formatter.add_header_row worksheet, group_row
 
         builder.groups_with_offset_and_colspan.each do |group, offset, colspan|
           colspan -= 1
-          formatter.merge_header_cells(offset..offset + colspan)
+          formatter.merge_header_cells(worksheet, offset..offset + colspan)
         end
       end
-      formatter.add_header_row header_row
+      formatter.add_header_row worksheet, header_row
     end
 
-    def write_body(formatter)
+    def write_body(formatter, worksheet)
       each_object do |object, rownum|
         yield rownum, objects.size if block_given?
-        formatter.add_row object_row(object)
+        formatter.add_row worksheet, object_row(object)
       end
     end
 
-    def write_widths(formatter)
-      formatter.column_widths(*builder.widths)
+    def write_widths(formatter, worksheet)
+      formatter.column_widths(worksheet, *builder.widths)
     end
 
     def find_in_batches?

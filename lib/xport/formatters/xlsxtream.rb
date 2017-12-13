@@ -1,36 +1,42 @@
 # frozen_string_literal: true
 
 module Xport
-  module CSV
+  module Xlsxtream
     extend ActiveSupport::Concern
 
     included do
-      require 'csv'
+      require 'xlsxtream'
     end
 
-    def to_csv(&block)
-      formatter = Xport::CSV::Formatter.new(self)
+    def to_xlsx(&block)
+      formatter = Xport::Xlsxtream::Formatter.new(self)
       to_file(formatter, &block)
     end
 
     class Formatter
+      attr_reader :export, :workbook
+
+      delegate :builder, to: :export
+
       def initialize(export)
-        @io  = StringIO.new
-        @csv = ::CSV.new(@io)
+        @io       = StringIO.new
+        @workbook = ::Xlsxtream::Workbook.new(@io)
+        @io.rewind
       end
 
       def to_file
+        workbook.close
         @io.rewind
         @io
       end
 
-      def add_worksheet
-        yield
+      def add_worksheet(&block)
+        workbook.write_worksheet('Sheet1', use_shared_strings: true, &block)
       end
 
       def add_row(worksheet, row)
         values = row.map { |v| v.is_a?(Xport::Cell) ? v.value : v }
-        @csv << values
+        worksheet << values
       end
       alias_method :add_header_row, :add_row
 

@@ -5,3 +5,4 @@ gemspec
 
 gem 'axlsx', github: 'randym/axlsx'
 gem 'rubyXL', github: 'weshatheleopard/rubyXL'
+gem 'xlsxtream', github: 'felixbuenemann/xlsxtream'
