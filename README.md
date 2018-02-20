@@ -36,7 +36,7 @@ Add this line to your application's Gemfile:
 gem 'xport'
 gem 'axlsx' # optional
 gem 'rubyXL' # optional
-fem 'xlsxtream' # optional
+gem 'xlsxtream' # optional
 ```
 
 And then execute:
