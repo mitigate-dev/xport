@@ -5,7 +5,7 @@ require "saxlsx"
 User = Struct.new(:id, :name, :email)
 User.class_eval do
   def self.human_attribute_name(name)
-    name
+    name.to_s
   end
 end
 
