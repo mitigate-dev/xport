@@ -33,6 +33,11 @@ module Xport
         yield worksheet
       end
 
+      def add_header_row(worksheet, row)
+        worksheet.change_row_bold(@i, true)
+        add_row(worksheet, row)
+      end
+
       def add_row(worksheet, row)
         row.each.with_index do |v, j|
           value = v.is_a?(Xport::Cell) ? v.value : v
@@ -40,7 +45,6 @@ module Xport
         end
         @i += 1
       end
-      alias_method :add_header_row, :add_row
 
       def merge_header_cells(worksheet, range)
         worksheet.merge_cells(0, range.first, 0, range.last)
