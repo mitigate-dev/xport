@@ -13,6 +13,36 @@ module Xport
       to_file(formatter, &block)
     end
 
+    def to_pgxlsx
+      formatter = Xport::Axlsx::Formatter.new(self)
+      formatter.add_worksheet do |worksheet|
+        write_header(formatter, worksheet)
+        connection = object_class.connection
+        query = connection.unprepared_statement do
+          scope = object_class.from("(#{objects.to_sql}) AS #{object_class.table_name}")
+          builder.columns.each_with_index do |column, i|
+            name = builder.headers[i]
+            as = human_attribute_name(name)
+            scope = scope.select("#{column} AS \"#{as}\"")
+          end
+          "COPY (#{scope.to_sql}) TO STDOUT"
+        end
+        raw_connection = connection.raw_connection
+        connection.send(:log, query) do
+          deco = PG::TextDecoder::CopyRow.new
+          res = raw_connection.copy_data query, deco do
+            while row = raw_connection.get_copy_data
+              formatter.add_row worksheet, row
+            end
+          end
+          res.check
+        end
+
+        write_widths(formatter, worksheet)
+      end
+      formatter.to_file
+    end
+
     class Formatter
       attr_reader :export, :workbook
 
